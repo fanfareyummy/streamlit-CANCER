@@ -11,8 +11,12 @@ st.set_page_config(
 )
 
 # [폰트 최적화] Windows와 Mac 환경에 맞는 가장 둥글고 귀여운 시스템 폰트 지정
-plt.rcParams['font.family'] = ['Malgun Gothic', 'AppleGothic', 'sans-serif']
-plt.rcParams['axes.unicode_minus'] = False
+#기존의 이 코드를 지우고:
+#plt.rcParams['font.family'] = ['Malgun Gothic', 'AppleGothic', 'sans-serif']
+#plt.rcParams['axes.unicode_minus'] = False
+
+#아래 코드로 교체해 주세요!
+import matplotlib.fontja  # 이 라인만 추가하면 matplotlib 한글 깨짐이 자동으로 해결됩니다핑!
 
 # --- 2. 웹페이지 전체에 귀여운 폰트 및 스타일 적용 (CSS 마법) ---
 st.markdown(
