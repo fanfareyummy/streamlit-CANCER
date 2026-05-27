@@ -4,4 +4,4 @@ pandas
 scikit-learn
 joblib
 matplotlib
-pip install matplotlib-fontja
+matplotlib-fontja
