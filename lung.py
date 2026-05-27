@@ -132,6 +132,7 @@ with left_col:
     )
 
 # --- 7. 우측 칼럼: 실시간 포지셔닝 그래프 ---
+# --- 7. 우측 칼럼: 실시간 포지셔닝 그래프 ---
 with right_col:
     st.markdown("<h2 style='color: #ff1493; text-align: center;'>📍 환자 군집 내 실시간 포지셔닝핑</h2>", unsafe_allow_html=True)
     
@@ -145,7 +146,7 @@ with right_col:
         cls_data = df[df['cluster'] == i]
         ax.scatter(cls_data['음주 횟수'], cls_data['흡연 횟수'], c=colors[i], alpha=0.5, s=50, edgecolors='none', zorder=2)
     
-    # 사용자의 현재 위치 마커 (커다란 하트 별!)
+    # 사용자의 현재 위치 마커
     ax.scatter(alcohol, smoke, c='#ff1493', s=450, marker='*', label='💖 나의 위치핑!', edgecolor='#ffffff', linewidth=3, zorder=10)
     
     # 디자인 데코레이션
@@ -154,13 +155,25 @@ with right_col:
     ax.spines['left'].set_color('#ffb6c1')
     ax.spines['bottom'].set_color('#ffb6c1')
     
-    ax.set_xlabel('주당 음주 횟수핑 (번 🥂)', color='#ff1493', fontsize=12, fontweight='bold')
-    ax.set_ylabel('주당 흡연 횟수핑 (번 ☁️)', color='#ff1493', fontsize=12, fontweight='bold')
-    ax.tick_params(colors='#ff69b4', labelsize=10)
+    # [핵심 수술] 글씨가 깨질 수 있는 모든 텍스트에 fontproperties=font_prop를 강제로 주입합니다핑!
+    ax.set_xlabel('주당 음주 횟수핑 (번 🥂)', color='#ff1493', fontsize=12, fontweight='bold', fontproperties=font_prop)
+    ax.set_ylabel('주당 흡연 횟수핑 (번 ☁️)', color='#ff1493', fontsize=12, fontweight='bold', fontproperties=font_prop)
+    
+    # 축 숫자들까지 한글/기호가 깨지지 않도록 수동 지정
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontproperties(font_prop)
+        label.set_color('#ff69b4')
+        label.set_size(10)
+        
     ax.grid(True, color='#ffe4e1', linestyle='--', alpha=0.6, zorder=1)
     
-    legend = ax.legend(facecolor='#ffffff', edgecolor='#ffb6c1', loc='upper right', fontsize=10)
-    plt.setp(legend.get_texts(), color='#ff1493', fontweight='bold') 
+    # 범례 한글 깨짐 방지
+    legend = ax.legend(facecolor='#ffffff', edgecolor='#ffb6c1', loc='upper right')
+    for text in legend.get_texts():
+        text.set_fontproperties(font_prop)
+        text.set_color('#ff1493')
+        text.set_weight('bold')
+        text.set_size(10)
     
     ax.set_xlim(-0.5, 10.5)
     ax.set_ylim(-1, 21)
