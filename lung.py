@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import urllib.request
 
 # --- 1. 티니핑 마법 페이지 설정 (완전 핑크·글리터 테마) ---
 st.set_page_config(
@@ -10,19 +12,27 @@ st.set_page_config(
     layout="wide"
 )
 
-# [폰트 최적화] Windows와 Mac 환경에 맞는 가장 둥글고 귀여운 시스템 폰트 지정
-#기존의 이 코드를 지우고:
-#plt.rcParams['font.family'] = ['Malgun Gothic', 'AppleGothic', 'sans-serif']
-#plt.rcParams['axes.unicode_minus'] = False
+# [초필살기] 나눔고딕 폰트를 온라인에서 강제로 다운로드하여 Matplotlib에 주입!
+@st.cache_data
+def load_font():
+    font_url = "https://github.com/google/fonts/raw/main/ofl/nanumgothic/NanumGothic-Regular.ttf"
+    font_path = "NanumGothic.ttf"
+    urllib.request.urlretrieve(font_url, font_path)
+    return font_path
 
-#아래 코드로 교체해 주세요!
-import matplotlib.fontja  # 이 라인만 추가하면 matplotlib 한글 깨짐이 자동으로 해결됩니다핑!
+try:
+    font_path = load_font()
+    font_prop = fm.FontProperties(fname=font_path)
+    plt.rcParams['font.family'] = font_prop.get_name()
+except Exception as e:
+    plt.rcParams['font.family'] = ['Malgun Gothic', 'AppleGothic', 'sans-serif']
+
+plt.rcParams['axes.unicode_minus'] = False
 
 # --- 2. 웹페이지 전체에 귀여운 폰트 및 스타일 적용 (CSS 마법) ---
 st.markdown(
     """
     <style>
-    /* 웹용 둥근 폰트 적용 및 기본 텍스트 컬러 변경 */
     @import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Nanum+Gothic+Coding&display=swap');
     
     html, body, [data-testid="stWidgetLabel"], .stMarkdown p {
